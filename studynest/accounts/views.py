@@ -1,25 +1,15 @@
-from django.shortcuts import render
-
-
-from django.shortcuts import render, redirect
-# Create your views here.
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from django.forms import inlineformset_factory
-
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
-
 from .decorators import unauthenticated_user, allowed_users, admin_only
-
 from django.contrib.auth.models import Group, User
 
 
-# Create your views here.
 
 
 
@@ -50,17 +40,6 @@ def accountSettings(request):
             
     context = {'form':form}
     return render(request, 'accounts/account_settings.html', context)
-
-# If the user isnt logged in he shouldnt be able to access anything
-@login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# @admin_only
-def home(request):    
-    customers = Customer.objects.all()
-    
-    context = {'customers': customers,}
-    return render(request, 'accounts/home.html', context)
-
 
 
 
@@ -128,3 +107,66 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+
+
+
+
+# Renderizando baralhos e cards na home
+
+
+
+@login_required(login_url='login')
+def home(request):
+    
+    customer = request.user.customer
+    baralhos = Baralho.objects.filter(customer=customer)
+    context = {'baralhos': baralhos}
+    return render(request, 'accounts/home.html', context)
+
+@login_required(login_url='login')
+def baralho_detail(request, id):
+    
+    baralhos = get_object_or_404(Baralho, id=id, customer=request.user.customer)
+    cards = Baralho.cards.all()
+    context = {'baralhos': baralhos, 'cards': cards}
+    return render(request, 'accounts/baralho_detail.html', context)
+
+@login_required(login_url='login')
+def baralho_create(request):
+    
+    if request.method == 'POST':
+        form = BaralhoForm(request.POST)
+        if form.is_valid():
+            baralho = form.save(commit=False)
+            baralho.customer = request.user.customer
+            baralho.save()
+            return redirect('home')
+    else:
+        form = BaralhoForm()
+    return render(request, 'accounts/baralho_form.html', {'form': form})
+
+@login_required(login_url='login')
+def baralho_update(request, id):
+    
+    baralho = get_object_or_404(Baralho, id=id, customer=request.user.customer)
+    if request.method == 'POST':
+        form = BaralhoForm(request.POST, instance=baralho)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = BaralhoForm(instance=baralho)
+    return render(request, 'accounts/baralho_form.html', {'form': form})
+
+@login_required(login_url='login')
+def baralho_delete(request, id):
+    # Busca o baralho do usuário autenticado
+    baralho = get_object_or_404(Baralho, id=id, customer=request.user.customer)
+    
+    # Se a requisição for POST, exclui o baralho e redireciona para a home
+    if request.method == 'POST':
+        baralho.delete()
+        return redirect('home')
+    
+    # Renderiza a página de confirmação para qualquer outra requisição (GET)
+    return render(request, 'accounts/baralho_delete.html', {'baralho': baralho})

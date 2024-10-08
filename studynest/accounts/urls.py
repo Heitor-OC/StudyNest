@@ -28,4 +28,12 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password_reset_form.html"), name="password_reset_confirm"),
     # Passw3ord successfully changed message
     path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_complete.html"), name="password_reset_complete"),
+
+
+    # Baralhos
+    path('baralho/<int:id>/', views.baralho_detail, name='baralho_detail'),
+    path('baralho/create/', views.baralho_create, name='baralho_create'),
+    path('baralho/update/<int:id>/', views.baralho_update, name='baralho_update'),
+    path('baralho/delete/<int:id>/', views.baralho_delete, name='baralho_delete'),
+
 ]
