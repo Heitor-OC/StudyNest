@@ -8,13 +8,9 @@ class CustomerForm(ModelForm):
     class Meta:
         model = Customer
         fields = '__all__'
-        exclude = ['user', 'nota_conhec_basicos', 'nota_conhec_especificos', 'nota_final', 'concorrencia']      
+        exclude = ['user']      
 
 
-"""class OrderForm(ModelForm):
-    class Meta:
-        model = Order
-        fields = '__all__' # ['customer', 'product', ...]"""
         
 
 class CreateUserForm(UserCreationForm):
@@ -24,3 +20,14 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
         
+
+
+class BaralhoForm(forms.ModelForm):
+    class Meta:
+        model = Baralho
+        fields = ['title']
+
+class CardForm(forms.ModelForm):
+    class Meta:
+        model = Card
+        fields = ['frente', 'resposta', 'dificuldade']
