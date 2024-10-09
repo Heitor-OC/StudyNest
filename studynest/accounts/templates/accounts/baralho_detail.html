@@ -1,16 +1,158 @@
 {% extends 'accounts/main.html' %}
 {% block content %}
-<h2>{{ baralhos.title }}</h2>
-<div class="card-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
-    {% for card in cards %}
-    <div class="card" style="border: 1px solid #ccc; padding: 10px; text-align: center;">
-        <h3>{{ card.frente }}</h3>
-        <p>Dificuldade: {{ card.get_dificuldade_display }}</p>
-        <a href="{% url 'card_detail' card.id %}">Ver detalhes</a> |
-        <a href="{% url 'card_update' card.id %}">Editar</a> |
-        <a href="{% url 'card_delete' card.id %}">Excluir</a>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #e9edf5 !important;
+    }
+
+    .deck_card {
+        width: 350px;
+        margin: auto;
+        background: #f4f7fc;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .deck_card h2 {
+        color: #2673e0;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background: #2673e0;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-danger {
+        background: #d9534f;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .deck-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        position: relative;
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .card h3 {
+        margin-top: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .card p {
+        margin: 10px 0;
+        color: #666;
+    }
+
+    .card a {
+        color: #2673e0;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+
+    .btn-danger {
+        background: #d9534f;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 20px;
+        color: white;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        color: #f4f7fc;
+    }
+
+    .btn-edit {
+        background: #585555;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 20px;
+        color: white;
+        position: absolute;
+        top: 10px;
+        left: 10px; 
+        cursor: pointer;
+        color: #f4f7fc;
+    }
+
+    .btn-modal {
+        width: 150px;
+        background: #2673e0;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="deck_card">
+    <h2>{{ baralhos.title }}</h2>
+
+    <div class="button-group">
+        <button class="btn-primary">Estudar Baralho</button>
+        <a href="{% url 'card_create' baralhos.id %}" class="btn-modal">Adicionar novo card</a>
+        
     </div>
-    {% endfor %}
+
+    <div class="card-container deck-list">
+        {% for card in cards %}
+        <div class="card">
+            <a href="{% url 'card_update' card.id %}" class="btn-edit">E</a> 
+            <a href="{% url 'card_delete' card.id %}" class="btn-danger">x</a>
+            <h3>{{ card.frente }}</h3>
+            <p>Dificuldade: {{ card.get_dificuldade_display }}</p>
+            <a href="{% url 'card_detail' card.id %}">Estudar Card</a> <br>
+        </div>
+        {% endfor %}
+    </div>
+
+  
 </div>
-<a href="{% url 'card_create' baralhos.id %}">Adicionar novo card</a>
 {% endblock %}
+

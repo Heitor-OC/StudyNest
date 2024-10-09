@@ -34,12 +34,14 @@
             <a class="nav-link" href="{% url 'customers_ranking' %}">Ranking</a>
           </li>    {% endcomment %}
           {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'home' %}">Home</a>
+          </li>
+        
             <li class="nav-item">
               <a href="{% url 'account' %}" class="nav-link">Settings</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'user-page' %}">Home</a>
-            </li> 
+           
             {% comment %} <li class="nav-item">
               <a class="nav-link" href="{% url 'gabarito' %}">Respostas</a>
             </li>   
