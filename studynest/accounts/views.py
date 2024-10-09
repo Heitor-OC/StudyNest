@@ -127,7 +127,7 @@ def home(request):
 def baralho_detail(request, id):
     
     baralhos = get_object_or_404(Baralho, id=id, customer=request.user.customer)
-    cards = Baralho.cards.all()
+    cards = baralhos.cards.all()
     context = {'baralhos': baralhos, 'cards': cards}
     return render(request, 'accounts/baralho_detail.html', context)
 
@@ -160,13 +160,57 @@ def baralho_update(request, id):
 
 @login_required(login_url='login')
 def baralho_delete(request, id):
-    # Busca o baralho do usuário autenticado
-    baralho = get_object_or_404(Baralho, id=id, customer=request.user.customer)
     
-    # Se a requisição for POST, exclui o baralho e redireciona para a home
+    baralho = get_object_or_404(Baralho, id=id, customer=request.user.customer)
+ 
     if request.method == 'POST':
         baralho.delete()
         return redirect('home')
     
-    # Renderiza a página de confirmação para qualquer outra requisição (GET)
     return render(request, 'accounts/baralho_delete.html', {'baralho': baralho})
+
+
+# Cards
+
+@login_required(login_url='login')
+def card_detail(request, id):
+    card = get_object_or_404(Card, id=id)
+    return render(request, 'accounts/card_detail.html', {'card': card})
+
+
+@login_required(login_url='login')
+def card_create(request, baralho_id):
+    baralho = get_object_or_404(Baralho, id=baralho_id, customer=request.user.customer)
+    if request.method == 'POST':
+        form = CardForm(request.POST)
+        if form.is_valid():
+            card = form.save(commit=False)
+            card.baralho = baralho
+            card.save()
+            return redirect('baralho_detail', id=baralho.id)
+    else:
+        form = CardForm()
+    return render(request, 'accounts/card_form.html', {'form': form, 'baralho': baralho})
+
+
+@login_required(login_url='login')
+def card_update(request, id):
+    card = get_object_or_404(Card, id=id, baralho__customer=request.user.customer)
+    if request.method == 'POST':
+        form = CardForm(request.POST, instance=card)
+        if form.is_valid():
+            form.save()
+            return redirect('baralho_detail', id=card.baralho.id)
+    else:
+        form = CardForm(instance=card)
+    return render(request, 'accounts/card_form.html', {'form': form, 'card': card})
+
+
+@login_required(login_url='login')
+def card_delete(request, id):
+    card = get_object_or_404(Card, id=id, baralho__customer=request.user.customer)
+    if request.method == 'POST':
+        baralho_id = card.baralho.id
+        card.delete()
+        return redirect('baralho_detail', id=baralho_id)
+    return render(request, 'accounts/card_delete.html', {'card': card})

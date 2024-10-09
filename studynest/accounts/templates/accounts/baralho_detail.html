@@ -1,0 +1,16 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+<h2>{{ baralhos.title }}</h2>
+<div class="card-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+    {% for card in cards %}
+    <div class="card" style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+        <h3>{{ card.frente }}</h3>
+        <p>Dificuldade: {{ card.get_dificuldade_display }}</p>
+        <a href="{% url 'card_detail' card.id %}">Ver detalhes</a> |
+        <a href="{% url 'card_update' card.id %}">Editar</a> |
+        <a href="{% url 'card_delete' card.id %}">Excluir</a>
+    </div>
+    {% endfor %}
+</div>
+<a href="{% url 'card_create' baralhos.id %}">Adicionar novo card</a>
+{% endblock %}

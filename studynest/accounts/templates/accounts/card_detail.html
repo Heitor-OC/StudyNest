@@ -1,0 +1,7 @@
+{% extends 'accounts/main.html' %}
+{% block content %}
+<h2>{{ card.frente }}</h2>
+<p>{{ card.resposta }}</p>
+<p>Dificuldade: {{ card.get_dificuldade_display }}</p>
+<a href="{% url 'baralho_detail' card.baralho.id %}">Voltar para Baralho</a>
+{% endblock %}

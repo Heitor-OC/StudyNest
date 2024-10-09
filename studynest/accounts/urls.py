@@ -36,4 +36,10 @@ urlpatterns = [
     path('baralho/update/<int:id>/', views.baralho_update, name='baralho_update'),
     path('baralho/delete/<int:id>/', views.baralho_delete, name='baralho_delete'),
 
+    # Cards
+    path('card/<int:id>/', views.card_detail, name='card_detail'),
+    path('card/create/<int:baralho_id>/', views.card_create, name='card_create'),
+    path('card/update/<int:id>/', views.card_update, name='card_update'),
+    path('card/delete/<int:id>/', views.card_delete, name='card_delete'),
+
 ]
