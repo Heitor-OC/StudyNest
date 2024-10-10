@@ -3,8 +3,8 @@
 {% block content %}
 <style>
     body, html {
-        margin: 0;
-        padding: 0;
+        margin: 0px;
+        padding: 0px;
         height: 100%;
         background: #e9edf5 !important;
     }
@@ -17,14 +17,15 @@
     }
 
     .deck_card {
-        width: 350px;
-        margin-top: auto;
-        margin-bottom: auto;
-        background: #f4f7fc;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
+    width: 350px;
+    margin-top: 10px; 
+    margin-bottom: auto;
+    background: #f4f7fc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     }
+
 
     .deck_card h2 {
         color: #2673e0;
@@ -79,7 +80,7 @@
     }
 
     .modal {
-        display: none; /* Inicialmente, escondido */
+        display: none; 
         position: fixed;
         z-index: 1000;
         left: 0;
@@ -129,12 +130,45 @@
         color: white;
         border: none;
     }
-</style>
 
+    .criar-baralho {
+    width: 15%; 
+    height: 60px;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 50px;
+    font-size: 25px;
+    text-align: center;
+    color: white;
+    background: #2673e0;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.criar-baralho::before {
+    content: '+';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: #2673e0;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px; /* Tornar a altura igual à largura para um círculo perfeito */
+    margin-right: 10px;
+    font-size: 24px; /* Aumentar se quiser um "+" maior */
+    font-weight: bold; /* Deixa o "+" mais espesso */
+    padding: 0;
+}
+
+
+</style>
+<a href="{% url 'baralho_create' %}" class="criar-baralho">Criar Novo Baralho</a>
 <div class="container">
-    <div class="deck_card">
-        <h2>Meus Baralhos</h2>
-        <a href="{% url 'baralho_create' %}" class="btn btn-primary">Criar Novo Baralho</a>
+    <div class="deck_card">        
         <div class="deck-list">
             {% for baralho in baralhos %}
                 <div class="card">
